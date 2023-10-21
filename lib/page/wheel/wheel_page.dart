@@ -14,7 +14,7 @@ class WheelPage extends StatelessWidget {
           children: [
             Text('Spin the wheel!'),
             SizedBox(height: 20),
-            Wheel(),
+            WheelComponent(),
           ],
         ),
       ),
