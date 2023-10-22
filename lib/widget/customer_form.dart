@@ -188,7 +188,7 @@ class CustomerForm extends HookWidget {
                     name: nameController.text,
                     industrialNature: industrialNature.value,
                     location: location.value,
-                    contactInfomation: contactController.text));
+                    contactInformation: contactController.text));
               }
             },
             child: const Text(
