@@ -9,6 +9,7 @@ import 'package:livestock/data_model/customer_data.dart';
 import 'package:livestock/data_model/game_data.dart';
 import 'package:livestock/page/provimi/provimi_dialog.dart';
 import 'package:livestock/utils/hover_extension.dart';
+import 'package:livestock/utils/image_utils.dart';
 import 'package:livestock/widget/customer_form.dart';
 
 enum ProvimiStage { customerForm, selection, info, question }
@@ -41,29 +42,28 @@ class ProvimiPage extends HookWidget {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: Colors.transparent,
               automaticallyImplyLeading: false,
               toolbarHeight: 140,
               title: Row(
                 children: [
-                  Image.asset(
-                    'assets/provimi.png',
+                  Image(
+                    image: imageMap['provimi']!,
                     width: 300,
-                    cacheWidth: 300,
                   ),
                   const SizedBox(width: 30),
                   if (provimiStage.value == ProvimiStage.customerForm) ...[
                     const Text(
                       '歡迎參加 嘉吉台灣 普樂諾頓產品問答遊戲',
-                      style: TextStyle(fontSize: 32),
+                      style: TextStyle(fontSize: 24),
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 15),
                     const Text(
                       '填寫資料即可參加',
                     )
                   ],
                 ],
               ),
-              backgroundColor: Colors.transparent,
             ),
             extendBodyBehindAppBar: true,
             backgroundColor: Colors.white,
@@ -73,27 +73,24 @@ class ProvimiPage extends HookWidget {
                   alignment: Alignment.bottomRight,
                   child: Padding(
                     padding: const EdgeInsets.only(right: 15, bottom: 10),
-                    child: Image.asset(
-                      'assets/cargill_logo.png',
+                    child: Image(
+                      image: imageMap['cargillLogo']!,
                       width: 150,
-                      cacheWidth: 150,
                     ),
                   ),
                 ),
                 Align(
                   alignment: Alignment.topRight,
-                  child: Image.asset(
-                    'assets/provimi_dot.png',
+                  child: Image(
+                    image: imageMap['provimiDot']!,
                     width: 200,
-                    cacheWidth: 200,
                   ),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Image.asset(
-                    'assets/provimi_color.png',
+                  child: Image(
+                    image: imageMap['provimiColor']!,
                     width: 380,
-                    cacheWidth: 380,
                   ),
                 ),
                 state is DatasState
@@ -135,10 +132,9 @@ class ProvimiPage extends HookWidget {
                                           },
                                           child: Stack(
                                             children: [
-                                              Image.asset(
-                                                'assets/provimi_pig.png',
+                                              Image(
+                                                image: imageMap['provimiPig']!,
                                                 height: 250,
-                                                cacheHeight: 250,
                                               ),
                                               Positioned.fill(
                                                 child: Center(
@@ -162,10 +158,9 @@ class ProvimiPage extends HookWidget {
                                           },
                                           child: Stack(
                                             children: [
-                                              Image.asset(
-                                                'assets/provimi_chicken.png',
+                                              Image(
+                                                image: imageMap['provimiChicken']!,
                                                 height: 300,
-                                                cacheHeight: 300,
                                               ),
                                               Positioned.fill(
                                                 child: Center(

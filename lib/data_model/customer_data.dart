@@ -29,22 +29,22 @@ class CustomerData extends Equatable {
   final String name;
   final IndustrialNature industrialNature;
   final Location location;
-  final String contactInfomation;
+  final String contactInformation;
 
   const CustomerData({
     required this.name,
     required this.industrialNature,
     required this.location,
-    required this.contactInfomation,
+    required this.contactInformation,
   });
 
   Map<String, dynamic> toDbJson() => {
         'name': name,
         'industrialNature': industrialNature.name,
         'location': location.name,
-        'contactInfomation': contactInfomation
+        'contactInformation': contactInformation
       };
 
   @override
-  List<Object> get props => [name, industrialNature, location, contactInfomation];
+  List<Object> get props => [name, industrialNature, location, contactInformation];
 }

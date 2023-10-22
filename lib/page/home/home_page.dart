@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:livestock/bloc/game/game_bloc.dart';
 import 'package:livestock/constants/color.dart';
 import 'package:livestock/utils/hover_extension.dart';
+import 'package:livestock/utils/image_utils.dart';
 import 'package:livestock/widget/general_background.dart';
 
 class HomePage extends StatelessWidget {
@@ -27,9 +28,8 @@ class HomePage extends StatelessWidget {
         alignment: Alignment.center,
         height: 480,
         width: 480,
-        child: Image.asset(
-          'assets/provimi.png',
-          cacheWidth: 400,
+        child: Image(
+          image: imageMap['provimi']!,
           width: 400,
         ),
       ),
@@ -51,9 +51,8 @@ class HomePage extends StatelessWidget {
         alignment: Alignment.center,
         height: 480,
         width: 480,
-        child: Image.asset(
-          'assets/purina.png',
-          cacheWidth: 400,
+        child: Image(
+          image: imageMap['purina']!,
           width: 400,
         ),
       ),

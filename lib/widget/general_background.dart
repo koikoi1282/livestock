@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:livestock/constants/color.dart';
+import 'package:livestock/utils/image_utils.dart';
 
 class GeneralBackground extends StatelessWidget {
   const GeneralBackground({super.key});
@@ -27,10 +28,9 @@ class GeneralBackground extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 20),
-        Image.asset(
-          'assets/cargill_logo.png',
+        Image(
+          image: imageMap['cargillLogo']!,
           width: 150,
-          cacheWidth: 150,
         ),
       ],
     );

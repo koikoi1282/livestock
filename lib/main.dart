@@ -14,9 +14,11 @@ import 'package:livestock/repository/game_data_repository.dart';
 import 'package:livestock/repository/game_repository.dart';
 import 'package:livestock/repository/result_repository.dart';
 import 'package:livestock/router/router.dart';
+import 'package:livestock/utils/image_utils.dart';
 
 void main() async {
   usePathUrlStrategy();
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -46,6 +48,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ImageUtils.precacheAllAsset(context);
+
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(

@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:livestock/bloc/authentication/authentication_bloc.dart';
 import 'package:livestock/constants/color.dart';
+import 'package:livestock/utils/image_utils.dart';
 import 'package:livestock/widget/general_background.dart';
 
 class LoginPage extends HookWidget {
@@ -54,16 +55,14 @@ class LoginPage extends HookWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.asset(
-                                      'assets/provimi.png',
+                                    Image(
+                                      image: imageMap['provimi']!,
                                       width: 250,
-                                      cacheWidth: 250,
                                     ),
                                     const SizedBox(width: 50),
-                                    Image.asset(
-                                      'assets/purina.png',
+                                    Image(
+                                      image: imageMap['purina']!,
                                       width: 250,
-                                      cacheWidth: 250,
                                     ),
                                   ],
                                 ),

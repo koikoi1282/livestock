@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:livestock/constants/color.dart';
+import 'package:livestock/utils/image_utils.dart';
 
 class ProvimiDialog extends StatelessWidget {
   final bool isCorrect;
@@ -13,7 +14,7 @@ class ProvimiDialog extends StatelessWidget {
       child: Container(
         width: MediaQuery.of(context).size.width * 0.4,
         height: MediaQuery.of(context).size.width * 0.4,
-        decoration: const BoxDecoration(image: DecorationImage(image: AssetImage('assets/provimi_dialog.jpeg'))),
+        decoration: BoxDecoration(image: DecorationImage(image: imageMap['provimiDialog']!)),
         child: Center(
           child: SizedBox(
             width: 350,
