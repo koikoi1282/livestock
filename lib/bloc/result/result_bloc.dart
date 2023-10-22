@@ -17,6 +17,8 @@ class ResultBloc extends Bloc<ResultEvent, ResultState> {
         await _resultRepository.addResult(event.game, event.customerData, event.gameData);
       } else if (event is DownloadResultEvent) {
         await _resultRepository.downloadResult(event.game);
+      } else if (event is DeleteResultByGameId) {
+        await _resultRepository.deleteResultByGameId(event.game);
       }
     });
   }

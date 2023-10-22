@@ -29,4 +29,6 @@ class ResultRepository {
 
     excel.save(fileName: '${game.name}_${DateTime.now().toString()}.xlsx');
   }
+
+  Future<void> deleteResultByGameId(Game game) async => await FirestoreProvider.deleteResultByGameId(game.id);
 }

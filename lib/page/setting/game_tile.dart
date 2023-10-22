@@ -58,6 +58,7 @@ class GameTile extends StatelessWidget {
                   if (value ?? false) {
                     context.read<GameBloc>().add(DeleteGameEvent(gameId: game.id));
                     context.read<GameDataBloc>().add(DeleteGameDatasByGameId(game: game));
+                    context.read<ResultBloc>().add(DeleteResultByGameId(game: game));
                   }
                 });
               },

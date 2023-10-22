@@ -26,3 +26,12 @@ class DownloadResultEvent extends ResultEvent {
   @override
   List<Object> get props => [game];
 }
+
+class DeleteResultByGameId extends ResultEvent {
+  final Game game;
+
+  const DeleteResultByGameId({required this.game});
+
+  @override
+  List<Object> get props => [game];
+}

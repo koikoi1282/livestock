@@ -49,4 +49,13 @@ class FirestoreProvider {
 
   static Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getResults(String id) async =>
       firestore.collection('result').where('gameId', isEqualTo: id).get().then((value) => value.docs);
+
+  static Future<void> deleteResultByGameId(String gameId) async {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> snapshots =
+        await firestore.collection('result').where('gameId', isEqualTo: gameId).get().then((value) => value.docs);
+
+    for (QueryDocumentSnapshot<Map<String, dynamic>> snapshot in snapshots) {
+      await firestore.collection('result').doc(snapshot.id).delete();
+    }
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:livestock/data_model/game.dart';
 import 'package:livestock/data_provider/firestore_provider.dart';
@@ -11,8 +13,8 @@ class GameRepository {
     List<QueryDocumentSnapshot<Map<String, dynamic>>> gameSnapshots = await FirestoreProvider.getGameList();
 
     gameList = gameSnapshots.map((snapshot) => Game.fromDbJson(snapshot.data()..addAll({'id': snapshot.id}))).toList();
-    selectedWheel = gameList.whereType<Wheel>().firstWhere((element) => element.isSelected);
-    selectedQuiz = gameList.whereType<Quiz>().firstWhere((element) => element.isSelected);
+    selectedWheel = gameList.whereType<Wheel>().firstWhereOrNull((element) => element.isSelected);
+    selectedQuiz = gameList.whereType<Quiz>().firstWhereOrNull((element) => element.isSelected);
 
     return gameList;
   }
