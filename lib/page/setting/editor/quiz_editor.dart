@@ -17,15 +17,16 @@ class QuizEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('問答項目', style: TextStyle(fontSize: 20)),
-        ValueListenableBuilder<List<ValueNotifier<QuizData>>>(
-          valueListenable: quizDatasNotifier,
-          builder: (context, quizDatas, _) {
-            return Expanded(
-              child: ListView(
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('問答項目', style: TextStyle(fontSize: 20)),
+          ValueListenableBuilder<List<ValueNotifier<QuizData>>>(
+            valueListenable: quizDatasNotifier,
+            builder: (context, quizDatas, _) {
+              return Column(
                 children: [
                   ...quizDatas.map((data) => QuizDataCard(
                       key: ValueKey(data.value.id),
@@ -44,11 +45,11 @@ class QuizEditor extends StatelessWidget {
                       icon: const Icon(Icons.add),
                     ),
                 ],
-              ),
-            );
-          },
-        ),
-      ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

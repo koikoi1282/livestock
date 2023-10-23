@@ -11,6 +11,7 @@ import 'package:livestock/page/provimi/provimi_dialog.dart';
 import 'package:livestock/utils/hover_extension.dart';
 import 'package:livestock/utils/image_utils.dart';
 import 'package:livestock/widget/customer_form.dart';
+import 'package:livestock/widget/general_background.dart';
 
 enum ProvimiStage { customerForm, selection, info, question }
 
@@ -43,6 +44,7 @@ class ProvimiPage extends HookWidget {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.transparent,
+              titleSpacing: 0,
               automaticallyImplyLeading: false,
               toolbarHeight: 140,
               title: Row(
@@ -66,17 +68,15 @@ class ProvimiPage extends HookWidget {
               ),
             ),
             extendBodyBehindAppBar: true,
+            resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
             body: Stack(
               children: [
-                Align(
+                const Align(
                   alignment: Alignment.bottomRight,
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 15, bottom: 10),
-                    child: Image(
-                      image: imageMap['cargillLogo']!,
-                      width: 150,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    child: GeneralBackground(onlyLogo: true),
                   ),
                 ),
                 Align(

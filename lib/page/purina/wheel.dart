@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -15,39 +14,21 @@ const wheelRadius = 500.0;
 class WheelComponent extends HookWidget {
   final List<WheelData> wheelDatas;
   final ui.Image wheelImage;
+  final List<ui.Image> imageList;
   final void Function(int selectedIndex) onFinish;
 
-  const WheelComponent({super.key, required this.wheelDatas, required this.wheelImage, required this.onFinish});
+  const WheelComponent(
+      {super.key, required this.wheelDatas, required this.wheelImage, required this.imageList, required this.onFinish});
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<List<ui.Image>?> imageList = useState(null);
     final ObjectRef<int?> selectedWheelData = useRef<int?>(null);
     final angle = useState<double>(0);
     final circleTime = useRef<int>(12);
     final priceResult = useState<double>(0);
     final angleController = useAnimationController(duration: const Duration(milliseconds: 3000));
 
-    Future<ui.Image> getImage(String path) async {
-      var completer = Completer<ImageInfo>();
-      var img = NetworkImage(path);
-      img.resolve(const ImageConfiguration()).addListener(ImageStreamListener((info, _) {
-        completer.complete(info);
-      }));
-      ImageInfo imageInfo = await completer.future;
-
-      return imageInfo.image;
-    }
-
-    void getImages() async {
-      imageList.value = [];
-      for (WheelData wheelData in wheelDatas) {
-        imageList.value = List.from(imageList.value!)..add(await getImage(wheelData.imageUrl!));
-      }
-    }
-
     useEffect(() {
-      getImages();
       final Animation<double> angleAnimation = CurvedAnimation(parent: angleController, curve: Curves.easeOutCirc);
 
       angleController
@@ -69,36 +50,34 @@ class WheelComponent extends HookWidget {
       return;
     }, []);
 
-    return imageList.value != null && imageList.value!.length == 6
-        ? Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 500,
-                height: 500,
-                child: Transform.rotate(
-                  angle: angle.value * (pi * 2) - priceResult.value * 2 * pi,
-                  child: CustomPaint(
-                    size: const Size(wheelRadius, wheelRadius),
-                    painter: WheelPainter(wheelDatas: wheelDatas, wheelImage: wheelImage, imageList: imageList.value!),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 30),
-                child: GestureDetector(
-                  onTap: () {
-                    spin(selectedWheelData, angleController, priceResult);
-                  },
-                  child: Image(
-                    image: imageMap['purinaPointer']!,
-                    width: 100,
-                  ),
-                ).showCursorOnHover,
-              ),
-            ],
-          )
-        : const Center(child: CircularProgressIndicator());
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        SizedBox(
+          width: 500,
+          height: 500,
+          child: Transform.rotate(
+            angle: angle.value * (pi * 2) - priceResult.value * 2 * pi,
+            child: CustomPaint(
+              size: const Size(wheelRadius, wheelRadius),
+              painter: WheelPainter(wheelDatas: wheelDatas, wheelImage: wheelImage, imageList: imageList),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: GestureDetector(
+            onTap: () {
+              spin(selectedWheelData, angleController, priceResult);
+            },
+            child: Image(
+              image: imageMap['purinaPointer']!,
+              width: 100,
+            ),
+          ).showCursorOnHover,
+        ),
+      ],
+    );
   }
 
   void spin(ObjectRef<int?> selectedWheelData, AnimationController angleController, ValueNotifier<double> priceResult) {

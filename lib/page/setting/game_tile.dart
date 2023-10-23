@@ -4,13 +4,13 @@ import 'package:livestock/bloc/game/game_bloc.dart';
 import 'package:livestock/bloc/game_data/game_data_bloc.dart';
 import 'package:livestock/bloc/result/result_bloc.dart';
 import 'package:livestock/data_model/game.dart';
-import 'package:livestock/page/setting/game_data_dialog.dart';
 import 'package:livestock/utils/hover_extension.dart';
 
 class GameTile extends StatelessWidget {
   final Game game;
+  final void Function() onTap;
 
-  const GameTile({super.key, required this.game});
+  const GameTile({super.key, required this.game, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +66,11 @@ class GameTile extends StatelessWidget {
         ],
       ),
       onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => GameDataDialog(game: game),
-        );
+        onTap();
+        // showDialog(
+        //   context: context,
+        //   builder: (context) => GameDataDialog(game: game),
+        // );
       },
     ).showCursorOnHover;
   }

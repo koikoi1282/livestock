@@ -59,7 +59,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () => GoRouter.of(context).push('/settings'),
+            onPressed: () => GoRouter.of(context).go('/settings'),
             icon: const Icon(Icons.settings),
           )
         ],

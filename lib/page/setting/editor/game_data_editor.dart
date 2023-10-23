@@ -11,8 +11,9 @@ import 'package:livestock/page/setting/editor/wheel_editor.dart';
 
 class GameDataEditor extends HookWidget {
   final Game? game;
+  final void Function() onFinished;
 
-  const GameDataEditor({super.key, this.game});
+  const GameDataEditor({super.key, this.game, required this.onFinished});
 
   @override
   Widget build(BuildContext context) {
@@ -32,114 +33,112 @@ class GameDataEditor extends HookWidget {
     useEffect(() {
       if (game != null) {
         context.read<GameDataBloc>().add(LoadGameDataEvent(game: game!));
-      } else {
-        context.read<GameDataBloc>().add(ResetGameDataEvent());
       }
 
       return;
-    });
+    }, []);
 
-    return BlocBuilder<GameDataBloc, GameDataState>(
-      bloc: context.read<GameDataBloc>(),
-      builder: (context, state) {
-        if (state is DataLoadingState) {
-          return const Center(child: CircularProgressIndicator());
+    return BlocListener<GameDataBloc, GameDataState>(
+      listener: (context, state) {
+        if (state is DatasState) {
+          if (game is Wheel) {
+            wheelDatasNotifier.value =
+                state.gameDatas.cast<WheelData>().map((data) => ValueNotifier<WheelData>(data)).toList();
+          } else {
+            quizDatasNotifier.value =
+                state.gameDatas.cast<QuizData>().map((data) => ValueNotifier<QuizData>(data)).toList();
+          }
         }
-
-        if (state is GameDataInitial) {
-          wheelDatasNotifier.value.clear();
-          quizDatasNotifier.value.clear();
-        }
-
-        return Form(
-          key: formKey,
-          child: Column(
-            children: [
-              GameEditor(
-                isEdit: game != null,
-                selectedValue: game?.isSelected ?? false,
-                gameNotifier: gameNotifier,
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: ValueListenableBuilder<Game>(
-                  valueListenable: gameNotifier,
-                  builder: (context, game, child) {
-                    if (game is Wheel) {
-                      if (state is DatasState) {
-                        wheelDatasNotifier.value =
-                            state.gameDatas.cast<WheelData>().map((data) => ValueNotifier<WheelData>(data)).toList();
-                      }
-                      return WheelEditor(game: game, wheelDatasNotifier: wheelDatasNotifier);
-                    }
-
-                    if (state is DatasState) {
-                      quizDatasNotifier.value =
-                          state.gameDatas.cast<QuizData>().map((data) => ValueNotifier<QuizData>(data)).toList();
-                    }
-
-                    return QuizEditor(game: game, quizDatasNotifier: quizDatasNotifier);
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ValueListenableBuilder<String>(
-                    valueListenable: errorText,
-                    builder: (context, text, __) {
-                      return Text(
-                        text,
-                        style: TextStyle(color: Theme.of(context).inputDecorationTheme.errorStyle?.color ?? Colors.red),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 20),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                    ),
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('取消'),
-                  ),
-                  const SizedBox(width: 20),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                      backgroundColor: primaryGreen,
-                    ),
-                    onPressed: () {
-                      errorText.value = '';
-                      if (formKey.currentState!.validate()) {
-                        if (wheelDatasNotifier.value.length != wheelDataCount &&
-                            quizDatasNotifier.value.length != quizDataCount) {
-                          errorText.value = '請新增至合適的遊戲項目數量。';
-                          return;
-                        }
-
-                        context.read<GameBloc>().add(SaveGameEvent(isNew: game == null, game: gameNotifier.value));
-
-                        context.read<GameDataBloc>().add(SaveGameDataEvent(
-                            game: gameNotifier.value,
-                            gameDatas: gameNotifier.value is Wheel
-                                ? wheelDatasNotifier.value.map((dataNotifier) => dataNotifier.value).toList()
-                                : quizDatasNotifier.value.map((dataNotifier) => dataNotifier.value).toList()));
-
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: const Text(
-                      '儲存',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
       },
+      child: BlocBuilder<GameDataBloc, GameDataState>(
+        bloc: context.read<GameDataBloc>(),
+        builder: (context, state) {
+          if (state is DataLoadingState) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return Form(
+            key: formKey,
+            child: Column(
+              children: [
+                GameEditor(
+                  isEdit: game != null,
+                  selectedValue: game?.isSelected ?? false,
+                  gameNotifier: gameNotifier,
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: ValueListenableBuilder<Game>(
+                    valueListenable: gameNotifier,
+                    builder: (context, game, child) {
+                      if (game is Wheel) {
+                        return WheelEditor(game: game, wheelDatasNotifier: wheelDatasNotifier);
+                      }
+
+                      return QuizEditor(game: game, quizDatasNotifier: quizDatasNotifier);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ValueListenableBuilder<String>(
+                      valueListenable: errorText,
+                      builder: (context, text, __) {
+                        return Text(
+                          text,
+                          style:
+                              TextStyle(color: Theme.of(context).inputDecorationTheme.errorStyle?.color ?? Colors.red),
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 20),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                      ),
+                      onPressed: () => onFinished(),
+                      child: const Text('取消'),
+                    ),
+                    const SizedBox(width: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        backgroundColor: primaryGreen,
+                      ),
+                      onPressed: () {
+                        errorText.value = '';
+                        if (formKey.currentState!.validate()) {
+                          if (wheelDatasNotifier.value.length != wheelDataCount &&
+                              quizDatasNotifier.value.length != quizDataCount) {
+                            errorText.value = '請新增至合適的遊戲項目數量。';
+                            return;
+                          }
+
+                          context.read<GameBloc>().add(SaveGameEvent(isNew: game == null, game: gameNotifier.value));
+
+                          context.read<GameDataBloc>().add(SaveGameDataEvent(
+                              game: gameNotifier.value,
+                              gameDatas: gameNotifier.value is Wheel
+                                  ? wheelDatasNotifier.value.map((dataNotifier) => dataNotifier.value).toList()
+                                  : quizDatasNotifier.value.map((dataNotifier) => dataNotifier.value).toList()));
+
+                          onFinished();
+                        }
+                      },
+                      child: const Text(
+                        '儲存',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

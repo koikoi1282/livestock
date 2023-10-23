@@ -17,18 +17,19 @@ class WheelEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '轉盤項目',
-          style: TextStyle(fontSize: 20),
-        ),
-        ValueListenableBuilder<List<ValueNotifier<WheelData>>>(
-          valueListenable: wheelDatasNotifier,
-          builder: (context, wheelDatas, _) {
-            return Expanded(
-              child: ListView(
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            '轉盤項目',
+            style: TextStyle(fontSize: 20),
+          ),
+          ValueListenableBuilder<List<ValueNotifier<WheelData>>>(
+            valueListenable: wheelDatasNotifier,
+            builder: (context, wheelDatas, _) {
+              return Column(
                 children: [
                   ...wheelDatas.map((data) => WheelDataCard(
                       key: ValueKey(data.value.id),
@@ -47,11 +48,11 @@ class WheelEditor extends StatelessWidget {
                       icon: const Icon(Icons.add),
                     ),
                 ],
-              ),
-            );
-          },
-        ),
-      ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -6,17 +6,22 @@ import 'package:livestock/page/setting/editor/game_data_editor.dart';
 
 class GameDataDialog extends HookWidget {
   final Game? game;
-  const GameDataDialog({super.key, this.game});
+  final void Function() onFinished;
+
+  const GameDataDialog({super.key, this.game, required this.onFinished});
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(game?.name != null ? '編輯遊戲' : '新增遊戲'),
-      backgroundColor: Colors.white,
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.height * 0.9,
-        child: GameDataEditor(game: game),
+    return SingleChildScrollView(
+      child: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: GameDataEditor(
+            game: game,
+            onFinished: onFinished,
+          ),
+        ),
       ),
     );
   }
