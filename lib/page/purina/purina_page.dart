@@ -57,6 +57,7 @@ class PurinaPage extends HookWidget {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: primaryRed,
+              titleSpacing: 0,
               automaticallyImplyLeading: false,
               toolbarHeight: 140,
               title: Row(
@@ -94,7 +95,8 @@ class PurinaPage extends HookWidget {
               ),
             ),
             body: Container(
-              decoration: BoxDecoration(image: DecorationImage(image: imageMap['purinaBackground']!)),
+              decoration:
+                  BoxDecoration(image: DecorationImage(image: imageMap['purinaBackground']!, fit: BoxFit.cover)),
               child: state is DatasState
                   ? Center(
                       child: Container(

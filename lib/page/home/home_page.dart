@@ -12,53 +12,50 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget provimiWidget = Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        color: lightGray,
-      ),
-      alignment: Alignment.center,
-      height: 500,
-      width: 500,
+    Widget provimiWidget = AspectRatio(
+      aspectRatio: 1,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
-          color: Colors.white,
+          color: lightGray,
         ),
         alignment: Alignment.center,
-        height: 480,
-        width: 480,
-        child: Image(
-          image: imageMap['provimi']!,
-          width: 400,
+        padding: const EdgeInsets.all(20),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: Colors.white,
+          ),
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(20),
+          child: Image(image: imageMap['provimi']!),
         ),
       ),
     );
 
-    Widget purinaWidget = Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        color: lightGray,
-      ),
-      alignment: Alignment.center,
-      height: 500,
-      width: 500,
+    Widget purinaWidget = AspectRatio(
+      aspectRatio: 1,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
-          color: Colors.white,
+          color: lightGray,
         ),
         alignment: Alignment.center,
-        height: 480,
-        width: 480,
-        child: Image(
-          image: imageMap['purina']!,
-          width: 400,
+        padding: const EdgeInsets.all(20),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: Colors.white,
+          ),
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(20),
+          child: Image(image: imageMap['purina']!),
         ),
       ),
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         actions: [
           IconButton(
@@ -79,23 +76,27 @@ class HomePage extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              state.selectedQuiz != null
-                                  ? GestureDetector(
-                                          onTap: () => GoRouter.of(context).push('/provimi'), child: provimiWidget)
-                                      .showCursorOnHover
-                                  : Opacity(
-                                      opacity: 0.6,
-                                      child: provimiWidget,
-                                    ),
+                              Expanded(
+                                child: state.selectedQuiz != null
+                                    ? GestureDetector(
+                                            onTap: () => GoRouter.of(context).push('/provimi'), child: provimiWidget)
+                                        .showCursorOnHover
+                                    : Opacity(
+                                        opacity: 0.6,
+                                        child: provimiWidget,
+                                      ),
+                              ),
                               const SizedBox(width: 20),
-                              state.selectedWheel != null
-                                  ? GestureDetector(
-                                          onTap: () => GoRouter.of(context).push('/purina'), child: purinaWidget)
-                                      .showCursorOnHover
-                                  : Opacity(
-                                      opacity: 0.6,
-                                      child: purinaWidget,
-                                    ),
+                              Expanded(
+                                child: state.selectedWheel != null
+                                    ? GestureDetector(
+                                            onTap: () => GoRouter.of(context).push('/purina'), child: purinaWidget)
+                                        .showCursorOnHover
+                                    : Opacity(
+                                        opacity: 0.6,
+                                        child: purinaWidget,
+                                      ),
+                              ),
                             ],
                           ),
                         )
@@ -103,6 +104,7 @@ class HomePage extends StatelessWidget {
                 },
               ),
             ),
+            const SizedBox(height: 30),
             const GeneralBackground(),
           ],
         ),

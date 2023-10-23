@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
     ImageUtils.precacheAllAsset(context);
 
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'Cargill Taiwan games',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
         inputDecorationTheme: const InputDecorationTheme(errorStyle: TextStyle(fontSize: 10)),
