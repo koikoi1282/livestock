@@ -64,7 +64,7 @@ class SettingPage extends HookWidget {
                 ),
           floatingActionButton: mode.value == SettingMode.list
               ? Padding(
-                  padding: const EdgeInsets.only(bottom: 120),
+                  padding: const EdgeInsets.only(bottom: 80),
                   child: FloatingActionButton(
                     tooltip: '新增遊戲',
                     backgroundColor: primaryGreen,

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:excel/excel.dart';
+import 'package:intl/intl.dart';
 import 'package:livestock/data_model/customer_data.dart';
 import 'package:livestock/data_model/game.dart';
 import 'package:livestock/data_model/game_data.dart';
@@ -27,7 +28,7 @@ class ResultRepository {
       ]);
     }
 
-    excel.save(fileName: '${game.name}_${DateTime.now().toString()}.xlsx');
+    excel.save(fileName: '${game.name}_${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now())}.xlsx');
   }
 
   Future<void> deleteResultByGameId(Game game) async => await FirestoreProvider.deleteResultByGameId(game.id);

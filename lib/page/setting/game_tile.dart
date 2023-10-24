@@ -29,41 +29,73 @@ class GameTile extends StatelessWidget {
             onPressed: () => context.read<ResultBloc>().add(DownloadResultEvent(game: game)),
           ),
           IconButton(
-              tooltip: '刪除遊戲',
-              onPressed: () {
-                showDialog<bool>(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('確定要刪除遊戲嗎？'),
-                      content: const Text('這個動作將會刪除所有遊戲資料及客戶資料。'),
-                      actions: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                          ),
-                          onPressed: () => Navigator.of(context).pop(false),
-                          child: const Text('取消'),
-                        ),
-                        ElevatedButton(
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                          ),
-                          onPressed: () => Navigator.of(context).pop(true),
-                          child: const Text('確定'),
-                        ),
-                      ],
-                    );
-                  },
-                ).then((value) {
-                  if (value ?? false) {
-                    context.read<GameBloc>().add(DeleteGameEvent(gameId: game.id));
-                    context.read<GameDataBloc>().add(DeleteGameDatasByGameId(game: game));
-                    context.read<ResultBloc>().add(DeleteResultByGameId(game: game));
-                  }
-                });
+            tooltip: '刪除客戶資料',
+            onPressed: () => showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('確定要刪除該遊戲綁定的客戶資料嗎？'),
+                  content: const Text('這個動作將會刪除所有客戶資料。'),
+                  actions: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('取消'),
+                    ),
+                    ElevatedButton(
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: const Text('確定'),
+                    ),
+                  ],
+                );
               },
-              icon: const Icon(Icons.delete_outline_rounded)),
+            ).then((value) {
+              if (value ?? false) {
+                context.read<ResultBloc>().add(DeleteResultByGameId(game: game));
+              }
+            }),
+            icon: const Icon(Icons.folder_delete_rounded),
+          ),
+          IconButton(
+            tooltip: '刪除遊戲',
+            onPressed: () => showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('確定要刪除遊戲嗎？'),
+                  content: const Text('這個動作將會刪除所有遊戲資料及客戶資料。'),
+                  actions: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('取消'),
+                    ),
+                    ElevatedButton(
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: const Text('確定'),
+                    ),
+                  ],
+                );
+              },
+            ).then((value) {
+              if (value ?? false) {
+                context.read<GameBloc>().add(DeleteGameEvent(gameId: game.id));
+                context.read<GameDataBloc>().add(DeleteGameDatasByGameId(game: game));
+                context.read<ResultBloc>().add(DeleteResultByGameId(game: game));
+              }
+            }),
+            icon: const Icon(Icons.delete_outline_rounded),
+          ),
         ],
       ),
       onTap: () {
