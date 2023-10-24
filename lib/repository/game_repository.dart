@@ -20,7 +20,7 @@ class GameRepository {
   }
 
   Future<void> saveGame(bool isNew, Game game) async =>
-      await FirestoreProvider.saveGame(isNew, game.id, game.toDbJson());
+      await FirestoreProvider.saveGame(isNew, game.id, game is Wheel ? game.toDbJson() : (game as Quiz).toDbJson());
 
   Future<void> deleteGame(String id) async => await FirestoreProvider.deleteGame(id);
 
@@ -34,7 +34,12 @@ class GameRepository {
     }
 
     for (Game tempGame in gameList) {
-      tempGame = tempGame.copy(isSelected: false);
+      if (tempGame is Wheel) {
+        tempGame = tempGame.copy(isSelected: false);
+      } else if (tempGame is Quiz) {
+        tempGame = tempGame.copy(isSelected: false);
+      }
+
       await saveGame(false, tempGame);
     }
   }

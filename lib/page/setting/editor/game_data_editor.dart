@@ -61,22 +61,29 @@ class GameDataEditor extends HookWidget {
             key: formKey,
             child: Column(
               children: [
-                GameEditor(
-                  isEdit: game != null,
-                  selectedValue: game?.isSelected ?? false,
-                  gameNotifier: gameNotifier,
-                ),
-                const SizedBox(height: 20),
                 Expanded(
-                  child: ValueListenableBuilder<Game>(
-                    valueListenable: gameNotifier,
-                    builder: (context, game, child) {
-                      if (game is Wheel) {
-                        return WheelEditor(game: game, wheelDatasNotifier: wheelDatasNotifier);
-                      }
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GameEditor(
+                          isEdit: game != null,
+                          selectedValue: game?.isSelected ?? false,
+                          gameNotifier: gameNotifier,
+                        ),
+                        const SizedBox(height: 20),
+                        ValueListenableBuilder<Game>(
+                          valueListenable: gameNotifier,
+                          builder: (context, game, child) {
+                            if (game is Wheel) {
+                              return WheelEditor(game: game, wheelDatasNotifier: wheelDatasNotifier);
+                            }
 
-                      return QuizEditor(game: game, quizDatasNotifier: quizDatasNotifier);
-                    },
+                            return QuizEditor(game: game, quizDatasNotifier: quizDatasNotifier);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -172,100 +179,278 @@ class GameEditor extends HookWidget {
               )),
         ]);
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CellTitle(
-                title: '遊戲名稱',
-                message: '顯示在遊戲頁面上方的名稱',
-              ),
-              ValueListenableBuilder<Game>(
-                valueListenable: gameNotifier,
-                builder: (context, game, __) {
-                  return TextFormField(
-                    decoration: const InputDecoration(border: OutlineInputBorder()),
-                    initialValue: game.name,
-                    onChanged: (value) => gameNotifier.value = game.copy(name: value),
-                    validator: (value) {
-                      if (value?.isEmpty ?? true) {
-                        return '不可為空';
-                      }
-
-                      return null;
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const CellTitle(title: '遊戲種類'),
-              Container(
-                height: 56,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Theme.of(context).colorScheme.outline)),
-                child: ValueListenableBuilder<Game>(
-                  valueListenable: gameNotifier,
-                  builder: (context, game, __) {
-                    return DropdownButtonHideUnderline(
-                      child: DropdownButton<Type>(
-                        value: game.runtimeType,
-                        items: gameList,
-                        onChanged: isEdit ? null : (value) => gameNotifier.value = game.changeType(),
-                        isDense: true,
-                        isExpanded: true,
+    return ValueListenableBuilder<Game>(
+      valueListenable: gameNotifier,
+      builder: (context, game, __) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CellTitle(
+                        title: '遊戲名稱',
+                        message: '顯示在遊戲頁面上方的名稱',
                       ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const CellTitle(
-                title: '選擇遊戲',
-                message: '如果想要更換選擇的遊戲，請至目標遊戲勾選',
-              ),
-              Row(
-                children: [
-                  ValueListenableBuilder<Game>(
-                    valueListenable: gameNotifier,
-                    builder: (context, game, __) {
-                      return Checkbox(
-                        value: game.isSelected,
+                      TextFormField(
+                        decoration: const InputDecoration(border: OutlineInputBorder()),
+                        initialValue: game.name,
                         onChanged: (value) {
-                          if (!selectedValue) {
-                            gameNotifier.value = game.copy(isSelected: value);
+                          if (game is Wheel) {
+                            gameNotifier.value = game.copy(name: value);
+                          } else if (game is Quiz) {
+                            gameNotifier.value = game.copy(name: value);
                           }
                         },
-                      );
-                    },
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return '不可為空';
+                          }
+
+                          return null;
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  const Text('設為選擇遊戲')
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CellTitle(title: '遊戲種類'),
+                      Container(
+                        height: 56,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: Theme.of(context).colorScheme.outline)),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<Type>(
+                            value: game.runtimeType,
+                            items: gameList,
+                            onChanged: isEdit ? null : (value) => gameNotifier.value = game.changeType(),
+                            isDense: true,
+                            isExpanded: true,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CellTitle(
+                        title: '選擇遊戲',
+                        message: '如果想要更換選擇的遊戲，請至目標遊戲勾選',
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: game.isSelected,
+                            onChanged: (value) {
+                              if (!selectedValue) {
+                                if (game is Wheel) {
+                                  gameNotifier.value = game.copy(isSelected: value);
+                                } else if (game is Quiz) {
+                                  gameNotifier.value = game.copy(isSelected: value);
+                                }
+                              }
+                            },
+                          ),
+                          const SizedBox(width: 10),
+                          const Text('設為選擇遊戲')
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CellTitle(
+                        title: '客戶資料頁面標題',
+                        message: '顯示在客戶資料頁面上方',
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(border: OutlineInputBorder()),
+                        initialValue: game.customerFormTitle,
+                        onChanged: (value) {
+                          if (game is Wheel) {
+                            gameNotifier.value = game.copy(customerFormTitle: value);
+                          } else if (game is Quiz) {
+                            gameNotifier.value = game.copy(customerFormTitle: value);
+                          }
+                        },
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return '不可為空';
+                          }
+
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CellTitle(
+                        title: '客戶資料頁面副標題',
+                        message: '顯示在客戶資料頁面上方',
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(border: OutlineInputBorder()),
+                        initialValue: game.customerFormSubtitle,
+                        onChanged: (value) {
+                          if (game is Wheel) {
+                            gameNotifier.value = game.copy(customerFormSubtitle: value);
+                          } else if (game is Quiz) {
+                            gameNotifier.value = game.copy(customerFormSubtitle: value);
+                          }
+                        },
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return '不可為空';
+                          }
+
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 20),
+            if (game is Wheel)
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CellTitle(
+                          title: '轉盤頁面標題',
+                          message: '顯示在轉盤頁面上方',
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(border: OutlineInputBorder()),
+                          initialValue: game.wheelTitle,
+                          onChanged: (value) => gameNotifier.value = game.copy(wheelTitle: value),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return '不可為空';
+                            }
+
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CellTitle(
+                          title: '獎勵頁面標題',
+                          message: '顯示在獎勵頁面上方',
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(border: OutlineInputBorder()),
+                          initialValue: game.priceTitle,
+                          onChanged: (value) {
+                            gameNotifier.value = game.copy(priceTitle: value);
+                          },
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return '不可為空';
+                            }
+
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )
+            else if (game is Quiz)
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CellTitle(
+                          title: '選擇頁面標題',
+                          message: '顯示在選擇頁面上方',
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(border: OutlineInputBorder()),
+                          initialValue: game.selectionTitle,
+                          onChanged: (value) => gameNotifier.value = game.copy(selectionTitle: value),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return '不可為空';
+                            }
+
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CellTitle(
+                          title: '選擇頁面副標題',
+                          message: '顯示在選擇頁面上方',
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(border: OutlineInputBorder()),
+                          initialValue: game.selectionSubtitle,
+                          onChanged: (value) {
+                            gameNotifier.value = game.copy(selectionSubtitle: value);
+                          },
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return '不可為空';
+                            }
+
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            ],
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }

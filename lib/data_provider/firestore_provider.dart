@@ -27,9 +27,8 @@ class FirestoreProvider {
 
   static Future<void> deleteGame(String id) async => await firestore.collection('game').doc(id).delete();
 
-  static Future<void> saveGameData(String id, String collectionName, Map<String, dynamic> map) async {
-    await firestore.collection(collectionName).doc(id).set(map);
-  }
+  static Future<void> saveGameData(String id, String collectionName, Map<String, dynamic> map) async =>
+      await firestore.collection(collectionName).doc(id).set(map);
 
   static Future<void> deleteGameData(String collectionName, GameData gameData) async =>
       await firestore.collection(collectionName).doc(gameData.id).delete();

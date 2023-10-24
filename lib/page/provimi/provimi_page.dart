@@ -7,6 +7,7 @@ import 'package:livestock/bloc/game_data/game_data_bloc.dart';
 import 'package:livestock/bloc/result/result_bloc.dart';
 import 'package:livestock/constants/color.dart';
 import 'package:livestock/data_model/customer_data.dart';
+import 'package:livestock/data_model/game.dart';
 import 'package:livestock/data_model/game_data.dart';
 import 'package:livestock/page/provimi/provimi_dialog.dart';
 import 'package:livestock/utils/hover_extension.dart';
@@ -24,6 +25,7 @@ class ProvimiPage extends HookWidget {
     final ValueNotifier<ProvimiStage> provimiStage = useState(ProvimiStage.customerForm);
     final ValueNotifier<QuizData?> selectedGameData = useValueNotifier<QuizData?>(null);
     final ObjectRef<CustomerData?> customerData = useRef(null);
+    final ObjectRef<Quiz> selectedQuiz = useRef((context.read<GameBloc>().state as GameListState).selectedQuiz!);
 
     useEffect(() {
       context
@@ -56,14 +58,12 @@ class ProvimiPage extends HookWidget {
                   ),
                   const SizedBox(width: 30),
                   if (provimiStage.value == ProvimiStage.customerForm) ...[
-                    const Text(
-                      '歡迎參加 嘉吉台灣 普樂諾頓產品問答遊戲',
-                      style: TextStyle(fontSize: 24),
+                    Text(
+                      selectedQuiz.value.customerFormTitle,
+                      style: const TextStyle(fontSize: 24),
                     ),
                     const SizedBox(width: 15),
-                    const Text(
-                      '填寫資料即可參加',
-                    )
+                    Text(selectedQuiz.value.customerFormSubtitle)
                   ],
                 ],
               ),
@@ -116,13 +116,13 @@ class ProvimiPage extends HookWidget {
                                   return Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        '黴菌毒素對於禽畜的生長影響非常大，讓我們來看看...',
-                                        style: TextStyle(color: primaryBlue, fontSize: 36),
+                                      Text(
+                                        selectedQuiz.value.selectionTitle,
+                                        style: const TextStyle(color: primaryBlue, fontSize: 36),
                                       ),
-                                      const Text(
-                                        '您對哪個畜種比較有興趣呢？',
-                                        style: TextStyle(color: primaryGreen, fontSize: 24),
+                                      Text(
+                                        selectedQuiz.value.selectionSubtitle,
+                                        style: const TextStyle(color: primaryGreen, fontSize: 24),
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -183,12 +183,12 @@ class ProvimiPage extends HookWidget {
                                   return Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        '黴菌毒素對於禽畜的生長影響非常大，讓我們來看看...',
-                                        style: TextStyle(color: primaryBlue, fontSize: 36),
+                                      Text(
+                                        selectedGameData.value!.descriptionTitle,
+                                        style: const TextStyle(color: primaryBlue, fontSize: 36),
                                       ),
                                       Text(
-                                        '不同黴菌毒素在${selectedGameData.value!.name}體內累積後的中毒症狀',
+                                        selectedGameData.value!.descriptionSubtitle,
                                         style: const TextStyle(color: primaryGreen, fontSize: 24),
                                       ),
                                       const SizedBox(height: 30),
@@ -203,6 +203,7 @@ class ProvimiPage extends HookWidget {
                                           Expanded(
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   selectedGameData.value!.description,
@@ -234,12 +235,12 @@ class ProvimiPage extends HookWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '看完了黴菌毒素對${selectedGameData.value!.name}的影響...',
+                                        selectedGameData.value!.quizTitle,
                                         style: const TextStyle(color: primaryBlue, fontSize: 36),
                                       ),
-                                      const Text(
-                                        '請您回答下列問題，即可獲得精美獎品',
-                                        style: TextStyle(color: primaryGreen, fontSize: 24),
+                                      Text(
+                                        selectedGameData.value!.quizSubtitle,
+                                        style: const TextStyle(color: primaryGreen, fontSize: 24),
                                       ),
                                       const SizedBox(height: 30),
                                       Text(

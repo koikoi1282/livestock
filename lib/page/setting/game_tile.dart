@@ -36,6 +36,7 @@ class GameTile extends StatelessWidget {
                   builder: (context) {
                     return AlertDialog(
                       title: const Text('確定要刪除遊戲嗎？'),
+                      content: const Text('這個動作將會刪除所有遊戲資料及客戶資料。'),
                       actions: [
                         TextButton(
                           style: TextButton.styleFrom(

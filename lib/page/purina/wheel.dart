@@ -15,10 +15,17 @@ class WheelComponent extends HookWidget {
   final List<WheelData> wheelDatas;
   final ui.Image wheelImage;
   final List<ui.Image> imageList;
+  final void Function() onAnimationFinished;
   final void Function(int selectedIndex) onFinish;
 
-  const WheelComponent(
-      {super.key, required this.wheelDatas, required this.wheelImage, required this.imageList, required this.onFinish});
+  const WheelComponent({
+    super.key,
+    required this.wheelDatas,
+    required this.wheelImage,
+    required this.imageList,
+    required this.onAnimationFinished,
+    required this.onFinish,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +46,7 @@ class WheelComponent extends HookWidget {
         })
         ..addStatusListener((status) {
           if (status == AnimationStatus.completed) {
+            onAnimationFinished();
             showDialog(
               context: context,
               builder: (context) => PurinaDialog(

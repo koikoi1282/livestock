@@ -12,15 +12,13 @@ class GameDataDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Center(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height * 0.9,
-          child: GameDataEditor(
-            game: game,
-            onFinished: onFinished,
-          ),
+    return Center(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: MediaQuery.of(context).size.height * 0.9,
+        child: GameDataEditor(
+          game: game,
+          onFinished: onFinished,
         ),
       ),
     );

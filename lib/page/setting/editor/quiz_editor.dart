@@ -17,39 +17,37 @@ class QuizEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text('問答項目', style: TextStyle(fontSize: 20)),
-          ValueListenableBuilder<List<ValueNotifier<QuizData>>>(
-            valueListenable: quizDatasNotifier,
-            builder: (context, quizDatas, _) {
-              return Column(
-                children: [
-                  ...quizDatas.map((data) => QuizDataCard(
-                      key: ValueKey(data.value.id),
-                      onRemove: () => quizDatasNotifier.value = List.from(quizDatasNotifier.value)..remove(data),
-                      quizData: data)),
-                  if (quizDatas.length < quizDataCount)
-                    IconButton(
-                      style:
-                          IconButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
-                      onPressed: quizDatas.length < 2
-                          ? () {
-                              quizDatasNotifier.value = List.from(quizDatasNotifier.value)
-                                ..add(ValueNotifier<QuizData>(QuizData.anonymous(game.id)));
-                            }
-                          : null,
-                      icon: const Icon(Icons.add),
-                    ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text('問答項目', style: TextStyle(fontSize: 20)),
+        ValueListenableBuilder<List<ValueNotifier<QuizData>>>(
+          valueListenable: quizDatasNotifier,
+          builder: (context, quizDatas, _) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ...quizDatas.map((data) => QuizDataCard(
+                    key: ValueKey(data.value.id),
+                    onRemove: () => quizDatasNotifier.value = List.from(quizDatasNotifier.value)..remove(data),
+                    quizData: data)),
+                if (quizDatas.length < quizDataCount)
+                  IconButton(
+                    style: IconButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+                    onPressed: quizDatas.length < 2
+                        ? () {
+                            quizDatasNotifier.value = List.from(quizDatasNotifier.value)
+                              ..add(ValueNotifier<QuizData>(QuizData.anonymous(game.id)));
+                          }
+                        : null,
+                    icon: const Icon(Icons.add),
+                  ),
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -68,6 +66,7 @@ class QuizDataCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,6 +178,128 @@ class QuizDataCard extends StatelessWidget {
                 IconButton(
                   onPressed: onRemove,
                   icon: const Icon(Icons.remove_circle_outline_rounded),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CellTitle(title: '說明頁標題'),
+                      ValueListenableBuilder<QuizData>(
+                        valueListenable: quizData,
+                        builder: (context, data, _) {
+                          return TextFormField(
+                            initialValue: data.descriptionTitle,
+                            onChanged: (value) => quizData.value = data.copy(descriptionTitle: value),
+                            maxLength: 50,
+                            decoration: const InputDecoration(border: OutlineInputBorder(), counterText: ''),
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return '不可為空';
+                              }
+
+                              return null;
+                            },
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CellTitle(title: '說明頁副標題'),
+                      ValueListenableBuilder<QuizData>(
+                        valueListenable: quizData,
+                        builder: (context, data, _) {
+                          return TextFormField(
+                            initialValue: data.descriptionSubtitle,
+                            onChanged: (value) => quizData.value = data.copy(descriptionSubtitle: value),
+                            maxLength: 50,
+                            decoration: const InputDecoration(border: OutlineInputBorder(), counterText: ''),
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return '不可為空';
+                              }
+
+                              return null;
+                            },
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CellTitle(title: '問題頁標題'),
+                      ValueListenableBuilder<QuizData>(
+                        valueListenable: quizData,
+                        builder: (context, data, _) {
+                          return TextFormField(
+                            initialValue: data.quizTitle,
+                            onChanged: (value) => quizData.value = data.copy(quizTitle: value),
+                            maxLength: 50,
+                            decoration: const InputDecoration(border: OutlineInputBorder(), counterText: ''),
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return '不可為空';
+                              }
+
+                              return null;
+                            },
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CellTitle(title: '問題頁副標題'),
+                      ValueListenableBuilder<QuizData>(
+                        valueListenable: quizData,
+                        builder: (context, data, _) {
+                          return TextFormField(
+                            initialValue: data.quizSubtitle,
+                            onChanged: (value) => quizData.value = data.copy(quizSubtitle: value),
+                            maxLength: 50,
+                            decoration: const InputDecoration(border: OutlineInputBorder(), counterText: ''),
+                            validator: (value) {
+                              if (value?.isEmpty ?? true) {
+                                return '不可為空';
+                              }
+
+                              return null;
+                            },
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

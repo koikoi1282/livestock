@@ -10,13 +10,14 @@ import 'package:livestock/bloc/game_data/game_data_bloc.dart';
 import 'package:livestock/bloc/result/result_bloc.dart';
 import 'package:livestock/constants/color.dart';
 import 'package:livestock/data_model/customer_data.dart';
+import 'package:livestock/data_model/game.dart';
 import 'package:livestock/data_model/game_data.dart';
 import 'package:livestock/page/purina/wheel.dart';
 import 'package:livestock/utils/image_utils.dart';
 import 'package:livestock/widget/customer_form.dart';
 import 'package:livestock/widget/general_background.dart';
 
-enum PurinaStage { customerForm, wheel }
+enum PurinaStage { customerForm, wheel, price }
 
 class PurinaPage extends HookWidget {
   const PurinaPage({super.key});
@@ -25,6 +26,7 @@ class PurinaPage extends HookWidget {
   Widget build(BuildContext context) {
     final ValueNotifier<PurinaStage> purinaStage = useState(PurinaStage.customerForm);
     final ObjectRef<CustomerData?> customerData = useRef<CustomerData?>(null);
+    final ObjectRef<Wheel> selectedWheel = useRef((context.read<GameBloc>().state as GameListState).selectedWheel!);
     final ValueNotifier<ui.Image?> wheelImage = useState<ui.Image?>(null);
     final ValueNotifier<List<ui.Image>?> imageList = useState(null);
 
@@ -101,20 +103,25 @@ class PurinaPage extends HookWidget {
                     Row(
                       children: [
                         if (purinaStage.value == PurinaStage.customerForm) ...[
-                          const Text(
-                            '歡迎參加 嘉吉台灣普瑞納產品抽獎',
-                            style: TextStyle(fontSize: 24, color: Colors.white),
+                          Text(
+                            selectedWheel.value.customerFormTitle,
+                            style: const TextStyle(fontSize: 24, color: Colors.white),
                           ),
                           const SizedBox(width: 15),
-                          const Text(
-                            '填寫資料即可參加',
-                            style: TextStyle(color: Colors.white),
+                          Text(
+                            selectedWheel.value.customerFormSubtitle,
+                            style: const TextStyle(color: Colors.white),
                           )
                         ],
                         if (purinaStage.value == PurinaStage.wheel)
-                          const Text(
-                            '請轉動轉盤，回答產品特色即可獲得贈品',
-                            style: TextStyle(fontSize: 24, color: Colors.white),
+                          Text(
+                            selectedWheel.value.wheelTitle,
+                            style: const TextStyle(fontSize: 24, color: Colors.white),
+                          ),
+                        if (purinaStage.value == PurinaStage.price)
+                          Text(
+                            selectedWheel.value.priceTitle,
+                            style: const TextStyle(fontSize: 24, color: Colors.white),
                           ),
                       ],
                     ),
@@ -153,12 +160,14 @@ class PurinaPage extends HookWidget {
                                     );
 
                                   case PurinaStage.wheel:
+                                  case PurinaStage.price:
                                     return wheelImage.value != null && imageList.value!.length == 6
                                         ? Center(
                                             child: WheelComponent(
                                               wheelDatas: state.gameDatas.cast<WheelData>(),
                                               wheelImage: wheelImage.value!,
                                               imageList: imageList.value!,
+                                              onAnimationFinished: () => purinaStage.value = PurinaStage.price,
                                               onFinish: (selectedIndex) {
                                                 context.read<ResultBloc>().add(AddResultEvent(
                                                     game: (context.read<GameBloc>().state as GameListState)
