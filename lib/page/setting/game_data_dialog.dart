@@ -15,7 +15,7 @@ class GameDataDialog extends HookWidget {
     return SingleChildScrollView(
       child: Center(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
+          width: MediaQuery.of(context).size.width * 0.9,
           height: MediaQuery.of(context).size.height * 0.9,
           child: GameDataEditor(
             game: game,

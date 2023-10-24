@@ -138,7 +138,7 @@ class PurinaPage extends HookWidget {
                         ? Center(
                             child: Container(
                               alignment: Alignment.topCenter,
-                              width: MediaQuery.of(context).size.width * 0.8,
+                              width: MediaQuery.of(context).size.width * 0.9,
                               child: () {
                                 switch (purinaStage.value) {
                                   case PurinaStage.customerForm:

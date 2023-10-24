@@ -36,7 +36,7 @@ class GeneralBackground extends StatelessWidget {
         ],
         Image(
           image: imageMap['cargillLogo']!,
-          width: 150,
+          width: 100,
         ),
       ],
     );

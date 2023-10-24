@@ -85,7 +85,7 @@ class WheelDataCard extends StatelessWidget {
                       return TextFormField(
                         initialValue: data.name,
                         onChanged: (value) => wheelData.value = data.copy(name: value),
-                        maxLength: 10,
+                        maxLength: 50,
                         decoration: const InputDecoration(border: OutlineInputBorder(), counterText: ''),
                         validator: (value) {
                           if (value?.isEmpty ?? true) {
@@ -113,7 +113,7 @@ class WheelDataCard extends StatelessWidget {
                       return TextFormField(
                         initialValue: data.price,
                         onChanged: (value) => wheelData.value = data.copy(price: value),
-                        maxLength: 10,
+                        maxLength: 50,
                         decoration: const InputDecoration(border: OutlineInputBorder(), counterText: ''),
                         validator: (value) {
                           if (value?.isEmpty ?? true) {

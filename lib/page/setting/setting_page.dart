@@ -36,7 +36,7 @@ class SettingPage extends HookWidget {
                     children: [
                       Expanded(
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
+                          width: MediaQuery.of(context).size.width * 0.9,
                           child: gameState is GameListState
                               ? ListView.builder(
                                   itemCount: gameState.gameList.length,
